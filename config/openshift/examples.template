@@ -1,0 +1,10 @@
+{
+  "apiVersion": "operators.coreos.com/v1alpha1",
+  "kind": "ClusterServiceVersion",
+  "metadata": {
+    "name": "kubestone.v$(VERSION)",
+    "annotations": {
+	  "alm-examples": .|tostring
+    }
+  }
+}

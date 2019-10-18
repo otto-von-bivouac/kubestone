@@ -16,6 +16,8 @@ endif
 
 GOLANGCI_VERSION = v1.17.1
 
+include config/openshift/Makefile
+
 all: manager
 
 # Run unit tests

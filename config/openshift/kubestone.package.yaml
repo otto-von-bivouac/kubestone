@@ -1,0 +1,5 @@
+packageName: kubestone
+channels:
+- name: alpha
+  currentCSV: kubestone.v$(VERSION)
+defaultChannel: alpha

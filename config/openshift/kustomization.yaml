@@ -1,0 +1,5 @@
+resources:
+- ./kubestone.clusterserviceversion.yaml
+patchesStrategicMerge:
+- ./examples.patch
+- ./rules.patch
