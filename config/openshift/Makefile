@@ -10,11 +10,16 @@ CRDS := $(foreach crd,$(wildcard $(CRDPATH)/*.yaml),$(DEPLOYPATH)/$(notdir $(crd
 
 # Sample custom resources
 SAMPLES := $(SAMPLEPATH)/perf_v1alpha1_drill.yaml
+SAMPLES += $(SAMPLEPATH)/perf_v1alpha1_fio.yaml
+SAMPLES += $(SAMPLEPATH)/perf_v1alpha1_ioping.yaml
 SAMPLES += $(SAMPLEPATH)/perf_v1alpha1_iperf3.yaml
 SAMPLES += $(SAMPLEPATH)/perf_v1alpha1_pgbench.yaml
+SAMPLES += $(SAMPLEPATH)/perf_v1alpha1_qperf.yaml
+SAMPLES += $(SAMPLEPATH)/perf_v1alpha1_sysbench.yaml
 
 UNAME   := $(shell uname | tr A-Z a-z)
-VERSION := $(shell git describe --tags --long --match 'v[0-9]*0' | awk -F'[.-]' '{print substr($$1,2) "." $$2 "." $$3 + $$4}')
+#VERSION := $(shell git describe --tags --long --match 'v[0-9]*0' | awk -F'[.-]' '{print substr($$1,2) "." $$2 "." $$3 + $$4}')
+VERSION := 0.0.13
 
 YQ         := $(shell go env GOPATH)/bin/yq
 YQ_VERSION := 2.4.0
