@@ -7,10 +7,9 @@ CONFIG_OPENSHIFT := config/openshift
 CONFIG_CRD_BASES := config/crd/bases
 TARGET_OPENSHIFT := target/openshift
 TARGET_KUSTOMIZE := target/kustomize
-TARGET_OPENSHIFT_VERSIONED := target/openshift/$(VERSION)
 
 # Custom resource definitions
-CRDS := $(foreach crd,$(wildcard $(CONFIG_CRD_BASES)/*.yaml),$(TARGET_OPENSHIFT_VERSIONED)/$(notdir $(crd)))
+CRDS := $(foreach crd,$(wildcard $(CONFIG_CRD_BASES)/*.yaml),$(TARGET_OPENSHIFT)/$(notdir $(crd)))
 
 # Sample custom resources
 SAMPLES := $(CONFIG_SAMPLES)/perf_v1alpha1_drill.yaml
@@ -31,7 +30,7 @@ YQ_VERSION := 2.4.0
 openshift-csv: version $(CRDS) $(TARGET_KUSTOMIZE)/alm-examples.patch $(TARGET_KUSTOMIZE)/install-permissions.patch $(TARGET_OPENSHIFT)/kubestone.package.yaml $(TARGET_OPENSHIFT)/kubestone.marketplace.yaml | $(TARGET_KUSTOMIZE)
 	cp $(CONFIG_OPENSHIFT)/kustomization.yaml $(TARGET_KUSTOMIZE)/
 	cp $(CONFIG_OPENSHIFT)/kubestone.clusterserviceversion.yaml $(TARGET_KUSTOMIZE)/
-	kustomize build $(TARGET_KUSTOMIZE) | sed "s#\$$(VERSION)#$(VERSION)#g" >$(TARGET_OPENSHIFT_VERSIONED)/kubestone.$(VERSION).clusterserviceversion.yaml
+	kustomize build $(TARGET_KUSTOMIZE) | sed "s#\$$(VERSION)#$(VERSION)#g" >$(TARGET_OPENSHIFT)/kubestone.$(VERSION).clusterserviceversion.yaml
 
 .PHONY: yq
 yq: $(YQ)
@@ -43,10 +42,10 @@ $(YQ):
 version:
 	@echo "### Building CSV v$(VERSION)"
 
-$(TARGET_OPENSHIFT) $(TARGET_KUSTOMIZE) $(TARGET_OPENSHIFT_VERSIONED):
+$(TARGET_OPENSHIFT) $(TARGET_KUSTOMIZE) $(TARGET_OPENSHIFT):
 	mkdir -p $@
 
-$(CRDS): $(TARGET_OPENSHIFT_VERSIONED)/%.yaml: $(CONFIG_CRD_BASES)/%.yaml | $(TARGET_OPENSHIFT_VERSIONED)
+$(CRDS): $(TARGET_OPENSHIFT)/%.yaml: $(CONFIG_CRD_BASES)/%.yaml | $(TARGET_OPENSHIFT)
 	cp $< $@
 
 $(TARGET_KUSTOMIZE)/alm-examples.patch: $(CONFIG_OPENSHIFT)/alm-examples.template $(SAMPLES) | $(TARGET_KUSTOMIZE) yq
