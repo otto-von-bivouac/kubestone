@@ -1,4 +1,4 @@
-VERSION := 0.4.1
+VERSION := 0.4.0
 #VERSION := $(shell git describe --abbrev=0 --tags --match 'v*' | sed s/^v//)
 
 CONFIG_RBAC      := config/rbac
@@ -47,7 +47,7 @@ $(TARGET_OPENSHIFT) $(TARGET_KUSTOMIZE) $(TARGET_OPENSHIFT_VERSIONED):
 	mkdir -p $@
 
 $(CRDS): $(TARGET_OPENSHIFT_VERSIONED)/%.yaml: $(CONFIG_CRD_BASES)/%.yaml | $(TARGET_OPENSHIFT_VERSIONED)
-	echo cp $< $@
+	cp $< $@
 
 $(TARGET_KUSTOMIZE)/alm-examples.patch: $(CONFIG_OPENSHIFT)/alm-examples.template $(SAMPLES) | $(TARGET_KUSTOMIZE) yq
 	set -e && for file in $(SAMPLES); do $(YQ) read $$file --tojson; done | jq -s "$$(cat $(CONFIG_OPENSHIFT)/alm-examples.template)" | yq read - >$@
