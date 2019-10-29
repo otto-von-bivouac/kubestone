@@ -7,8 +7,9 @@ metadata:
   name: kubestone.v$(VERSION)
   annotations:
     categories: "Developer Tools"
-    description: "Kubestone is a benchmarking Operator that can evaluate the performance of Kubernetes installations."
-    containerImage: xridge/kubestone:latest
+    capabilities: "Full Lifecycle"
+    description: "Kubestone is a benchmarking Operator that can evaluate the performance of Kubernetes installations and external services."
+    containerImage: xridge/kubestone:v$(VERSION)
     createdAt: 2019-10-18T12:32:00Z
     repository: https://github.com/xridge/kubestone
     alm-examples: []
@@ -19,7 +20,7 @@ spec:
   #replaces: kubestone:v$(OLDVERSION)
   displayName: Kubestone
   description: |
-    Kubestone is a benchmarking Operator that can evaluate the performance of Kubernetes installations.
+    Kubestone is a benchmarking Operator that can evaluate the performance of Kubernetes installations and external services.
 
     Features:
     - Supports common set of benchmarks to measure: CPU, Disk, Network and Application performance
@@ -71,8 +72,8 @@ spec:
     strategy: deployment
     spec:
       permissions:
-      - serviceAccountName: kubestone-operator
-        rules: []
+      - rules: []
+        serviceAccountName: kubestone-operator
       deployments:
       - name: kubestone-controller-manager
         spec:
@@ -89,7 +90,7 @@ spec:
               containers:
               - command:
                 - /manager
-                image: xridge/kubestone:latest
+                image: xridge/kubestone:v$(VERSION)
                 name: kubestone
                 resources:
                   requests:
@@ -121,7 +122,7 @@ spec:
          - urn:alm:descriptor:com.tectonic.ui:text
        # TODO: Add statusDescriptors 
        # The statusDescriptors does not work at the moment:
-       # we are reporting a boolin, while OpenShift can only deal
+       # we are reporting a boolean, while OpenShift can only deal
        # with text, podStatus, podCount and some other non-bool type
        #statusDescriptors:
        #- description: Shows the state of benchmark execution

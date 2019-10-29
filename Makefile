@@ -48,8 +48,13 @@ deploy: manifests
 deploy-e2e: manifests
 	kustomize build config/e2e | kubectl apply -f -
 
+generate-kustomized-samples:
+	# It is required for OpenShift to have a rendered example. 
+	# Render one example for the crds which are using kustomize overlays 
+	kustomize build samples/fio/overlays/emptydir > samples/perf_v1alpha1_fio.yaml
+
 # Generate manifests: CRD, RBAC, etc.
-manifests: controller-gen
+manifests: controller-gen generate-kustomized-samples
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=manager-role webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 
 # Download gen-crd-api-reference-docs

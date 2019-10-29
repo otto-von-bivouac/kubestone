@@ -9,7 +9,7 @@
       "spec": {
         "permissions": [{
           "serviceAccountName": "kubestone-operator",
-          "rules": .rules
+          "rules": del(.rules[] | select(.apiGroups[0] == "apiextensions.k8s.io")) | .rules
         }]
       }
     }
